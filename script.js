@@ -20,8 +20,9 @@ const audioAcabouTime = new Audio('sons/beep.mp3')
 musica.loop = true;
 
 //Variáveis de estado
-let tempo = 1500;
+let tempo = 10;
 let intervaloId = null
+let valorDataContexto = html.getAttribute('data-contexto')
 
 // Eventos e Funções
 switchMusica.addEventListener("change", () =>{
@@ -53,6 +54,7 @@ btnDescansoLongo.addEventListener("click", () => {
 function alterarContexto(contexto){
     removerActiveBotoes();
     html.setAttribute('data-contexto', contexto);
+    valorDataContexto = contexto
     bannerImg.setAttribute('src', `imagens/${contexto}.png`)
     selecionarTempo(contexto);
     alterarTexto(contexto);
@@ -67,13 +69,13 @@ function removerActiveBotoes() {
 function selecionarTempo(contexto){
     switch (contexto) {
         case "foco":
-            tempo = 1500;
+            tempo = 10;
             break;
         case "descanso-curto":
-            tempo = 300;
+            tempo = 3;
             break;
         case "descanso-longo":
-            tempo = 900; 
+            tempo = 5; 
             break;
         default:
             break;
@@ -103,9 +105,15 @@ function alterarTexto(contexto){
 //Método para realizar a contagem regressiva e não permitir tempo negativo
 const contagemRegressiva = () =>{
     if(tempo <= 0){
-        zerar()
         audioAcabouTime.play()
         alert('Tempo Finalizado')
+        const focoAtivo = html.getAttribute('data-contexto') == 'foco'
+        if(focoAtivo){
+            const evento = new CustomEvent('FocoFinalizado')
+            document.dispatchEvent(evento)
+        }
+        zerar()
+        selecionarTempo(valorDataContexto)
         return
     }
     tempo -= 1;
@@ -115,8 +123,8 @@ const contagemRegressiva = () =>{
 //Método para iniciar, pausar e retomar timer
 function iniciarPausar(){
     if(intervaloId){
-        zerar()
         audioPausaTimer.play()
+        zerar()
         return
     }
     audioIniciaTimer.play()
