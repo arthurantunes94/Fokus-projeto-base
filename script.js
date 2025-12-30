@@ -20,7 +20,7 @@ const audioAcabouTime = new Audio('sons/beep.mp3')
 musica.loop = true;
 
 //Variáveis de estado
-let tempo = 10;
+let tempo = 1500;
 let intervaloId = null
 let valorDataContexto = html.getAttribute('data-contexto')
 
@@ -69,13 +69,13 @@ function removerActiveBotoes() {
 function selecionarTempo(contexto){
     switch (contexto) {
         case "foco":
-            tempo = 10;
+            tempo = 1500;
             break;
         case "descanso-curto":
-            tempo = 3;
+            tempo = 300;
             break;
         case "descanso-longo":
-            tempo = 5; 
+            tempo = 900; 
             break;
         default:
             break;
